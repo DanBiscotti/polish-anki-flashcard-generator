@@ -53,6 +53,14 @@ class Verb:
     def getVerb(self,tense,gender,plural):
         return self.variants[tense][gender][plural]
 
+class Sentence:
+
+    # Constructor
+    def __init__(self,sentenceFunction):
+        self.sentenceFunction=sentenceFunction
+
+    def getSentence(self,*args):
+        return self.sentenceFunction(*args)
 
 nouns = list()
 nouns.append(Noun("kitten","kotek","kotka","kotkowi","kotka","kotkiem","kotku","kotku",False,Gender.MALE))
@@ -65,8 +73,6 @@ verbs = list()
 #verbs.appends(Verb("To be","jest","by"+wu,"b"+en+"dzie"))
 
 verb = Verb("",[[["by"+wu,"by"+wu+"y"],["by"+wu+"a","by"+wu+"y"],["by"+wu+"o","by"+wu+"y"]],[["jest","s"+on],["jest","s"+on],["jest","s"+on]],[["b"+en+"dzie","b"+en+"d"+on],["b"+en+"dzie","b"+en+"d"+on],["b"+en+"dzie","b"+en+"d"+on]]])
-
-
 
 for noun in nouns:
     print(noun.english.upper()+":")
@@ -83,3 +89,8 @@ for noun in nouns:
     print("To "+verb.getVerb(int(Tense.PAST),int(noun.gender),int(noun.plural))+" "+noun.nominative)
     print("To "+verb.getVerb(int(Tense.PRESENT),int(noun.gender),int(noun.plural))+" "+noun.nominative)
     print("To "+verb.getVerb(int(Tense.FUTURE),int(noun.gender),int(noun.plural))+" "+noun.nominative)
+
+sentence = Sentence(lambda noun, verb, tense: "To "+verb.getVerb(int(tense),int(noun.gender),int(noun.plural))+" "+noun.nominative)
+while True:
+    input()
+    print(sentence.getSentence(random.choice(nouns),verb,random.choice(tuple(Tense))))
