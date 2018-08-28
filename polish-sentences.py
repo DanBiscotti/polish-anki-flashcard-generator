@@ -1,96 +1,57 @@
 from enum import IntEnum
 import random
+import wordclasses
 
-on = "ą"
-en = "ę"
-oo = "ó"
-ch = "ć"
-wu = "ł"
-ni = "ń"
-sh = "ś"
-zi = "ź"
-zo = "ż"
-
-class Noun:
-    
-    # Constructor
-    def __init__(self,english,nominative,genetive,dative,accusative,instrumental,locative,vocative,plural,gender):
-        self.english=english
-        self.nominative=nominative
-        self.accusative=accusative
-        self.dative=dative
-        self.genetive=genetive
-        self.instrumental=instrumental
-        self.locative=locative
-        self.vocative=vocative
-        self.plural=plural
-        self.gender=gender
-
-    def copula(self):
-        if(self.plural):
-            return "s"+on+" "
-        else:
-            return "jest "
-
-
-class Tense(IntEnum):
-    PAST=0
-    PRESENT=1
-    FUTURE=2
-
-class Gender(IntEnum):
-    MALE=0
-    FEMALE=1
-    NEUTER=2
-
-class Verb:
-
-    # Constructor
-    def __init__(self,english,variants):
-        self.english=english
-        self.variants=variants
-
-    def getVerb(self,tense,gender,plural):
-        return self.variants[tense][gender][plural]
-
-class Sentence:
-
-    # Constructor
-    def __init__(self,sentenceFunction):
-        self.sentenceFunction=sentenceFunction
-
-    def getSentence(self,*args):
-        return self.sentenceFunction(*args)
-
+# NOUNS
 nouns = list()
-nouns.append(Noun("kitten","kotek","kotka","kotkowi","kotka","kotkiem","kotku","kotku",False,Gender.MALE))
-nouns.append(Noun("book","ksi"+on+zo+"ka","ksi"+on+zo+"ki","ksi"+on+zo+"ce","ksi"+on+zo+"k"+en,"ksi"+on+zo+"k"+on,"ksi"+on+zo+"ce","ksi"+on+zo+"ko",False,Gender.FEMALE))
-nouns.append(Noun("egg","jajko","jajka","jajku","jajko","jajkiem","jajku","jajko",False,Gender.NEUTER))
-nouns.append(Noun("penises","penisy","penis"+oo+"w","penisom","penisy","penisami","penisach","penisy",True,Gender.MALE))
-nouns.append(Noun("pussies","cipki","cipek","cipkom","cipki","cipkami","cipkach","cipki",True,Gender.FEMALE))
+nouns.append(Noun("kitten",["kotek","kotka","kotkowi","kotka","kotkiem","kotku","kotku"],SINGULAR,MALE))
+nouns.append(Noun("book",["ksi"+on+zo+"ka","ksi"+on+zo+"ki","ksi"+on+zo+"ce","ksi"+on+zo+"k"+en,"ksi"+on+zo+"k"+on,"ksi"+on+zo+"ce","ksi"+on+zo+"ko"],SINGULAR,FEMALE,THIRD))
+nouns.append(Noun("egg",["jajko","jajka","jajku","jajko","jajkiem","jajku","jajko"],SINGULAR,NEUTER))
+nouns.append(Noun("penises",["penisy","penis"+oo+"w","penisom","penisy","penisami","penisach","penisy"],PLURAL,MALE))
+nouns.append(Noun("pussies",["cipki","cipek","cipkom","cipki","cipkami","cipkach","cipki"],PLURAL,FEMALE))
+
+# PRONOUNS
+pronouns = list()
+pronouns.append(Pronoun("I",["ja","","","","","",""],SINGULAR,NEUTER,FIRST))
+pronouns.append(Pronoun("you",["ty","","","","","",""],SINGULAR,NEUTER,SECOND))
+pronouns.append(Pronoun("he",["on","","","","","",""],SINGULAR,MALE,THIRD))
+pronouns.append(Pronoun("she",["ona","","","","","",""],SINGULAR,FEMALE,THIRD))
+pronouns.append(Pronoun("it",["to","","","","","",""],SINGULAR,NEUTER,THIRD))
+pronouns.append(Pronoun("we",["my","","","","","",""],PLURAL,NEUTER,FIRST))
+pronouns.append(Pronoun("you (plural)",["wy","","","","","",""],PLURAL,NEUTER,SECOND))
+pronouns.append(Pronoun("they (male)",["oni","","","","","",""],PLURAL,MALE,THIRD))
+pronouns.append(Pronoun("they (female)",["ona","","","","","",""],PLURAL,FEMALE,THIRD))
 
 verbs = list()
-#verbs.appends(Verb("To be","jest","by"+wu,"b"+en+"dzie"))
+toBe = Verb("to be","by"+ch,[[[[,,"by"+wu],["byli"+sh+"my","byli"+sh+"cie","byli"]],[["by"+wu+"am","by"+wu+"a"+sh,"by"+wu+"a"],["by"+wu+"y"+sh+"my","by"+wu+"y"+sh+"cie","by"+wu+"y"]],[["","","by"+wu+"o"],["","","by"+wu+"y"]]],[[["","",""],["","",""]],[["","",""],["","",""]],[[[]]]]
+toLike = Verb("to annoy","denerwowa"+ch,[])
 
-verb = Verb("",[[["by"+wu,"by"+wu+"y"],["by"+wu+"a","by"+wu+"y"],["by"+wu+"o","by"+wu+"y"]],[["jest","s"+on],["jest","s"+on],["jest","s"+on]],[["b"+en+"dzie","b"+en+"d"+on],["b"+en+"dzie","b"+en+"d"+on],["b"+en+"dzie","b"+en+"d"+on]]])
+verbs.append(toBe)
+verbs.append()
 
-for noun in nouns:
-    print(noun.english.upper()+":")
-    print("To "+noun.copula()+noun.nominative)
-    print("Nie ma "+noun.genetive)
-    print("Przygl"+on+"dam si"+en+" "+noun.dative)
-    print("Widz"+en+" "+noun.accusative)
-    print("Wychodz"+en+" z "+noun.instrumental)
-    print("My"+sh+"l"+en+" o "+noun.locative)
-    print("O "+noun.vocative+"!")
-    print()
+sentences = list()
 
-for noun in nouns:
-    print("To "+verb.getVerb(int(Tense.PAST),int(noun.gender),int(noun.plural))+" "+noun.nominative)
-    print("To "+verb.getVerb(int(Tense.PRESENT),int(noun.gender),int(noun.plural))+" "+noun.nominative)
-    print("To "+verb.getVerb(int(Tense.FUTURE),int(noun.gender),int(noun.plural))+" "+noun.nominative)
+def sentence1():
+    subject` = random.choice(nouns)
+    tense = random.choice(tuple(Tense))
+    return "To "+toBe.getVerb(int(tense),int(subject.gender),int(subject.plural))+" "+subject.nominative
 
-sentence = Sentence(lambda noun, verb, tense: "To "+verb.getVerb(int(tense),int(noun.gender),int(noun.plural))+" "+noun.nominative)
+def sentence2():
+    verb = random.choice(verbs)
+    return "Lubi"+en+" "+verb.infinitive
+
+def sentence3():
+    subject = random.choice(nouns)
+    verb = random.choice(verbs)
+    return subject.nominative+" lubi "+verb.infinitive
+
+def sentence4():
+
+sentences.append(Sentence(sentence1))
+sentences.append(Sentence(sentence2))
+
 while True:
-    input()
-    print(sentence.getSentence(random.choice(nouns),verb,random.choice(tuple(Tense))))
+    print(random.choice(sentences).getSentence())
+    s = input()
+    if(s=="x"):
+        sys.exit()
