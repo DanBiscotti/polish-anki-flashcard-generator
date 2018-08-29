@@ -1,14 +1,3 @@
-# Special characters
-on = "ą"
-en = "ę"
-oo = "ó"
-ch = "ć"
-wu = "ł"
-ni = "ń"
-sh = "ś"
-zi = "ź"
-zo = "ż"
-
 # Tense
 PAST=0
 PRESENT=1

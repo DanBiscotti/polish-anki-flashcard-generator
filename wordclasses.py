@@ -1,4 +1,9 @@
 from grammarconstants import PAST,PRESENT,FUTURE,MALE,FEMALE,NEUTER,SINGULAR,PLURAL,FIRST,SECOND,THIRD,PERFECT,IMPERFECT,NEAR,FAR
+
+
+# wordclasses - Holds classes for different types of words, and also methods related to those word classes
+
+
 # Noun class
 class Noun:
     
@@ -15,9 +20,10 @@ class Noun:
 
     def copula(self):
         if(bool(self.singular)):
-            return "jest "
+            return "jest"
         else:
-            return "s"+on+" "
+            return "s"+on
+
 
 # Pronoun class
 class Pronoun(Noun):
@@ -36,6 +42,7 @@ class Pronoun(Noun):
         self.gender=gender
         return cases[case]
 
+
 # Verb Class
 class Verb:
 
@@ -48,6 +55,23 @@ class Verb:
     def get(self,tense,gender,plural,person):
         return self.variants[tense][gender][plural][person]
 
+    # Method that returns an empty 5d array for holding verb conjugations
+    @staticmethod
+    def initVerbVariants():
+        result = list()
+        for i in range(3):
+            result.append(list())
+            for j in range(3):
+                result[i].append(list())
+                for k in range(2):
+                    result[i][j].append(list())
+                    for l in range(3):
+                        result[i][j][k].append(list())
+                        for m in range(2):
+                            result[i][j][k][l].append(list())
+        return result
+
+
 # Adjective class
 class Adjective:
 
@@ -57,6 +81,8 @@ class Adjective:
             this.plural=plural
             this.gender=gender
 
+
+# Demonstrative class
 class Demonstrative:
 
     # Constructor
@@ -68,24 +94,6 @@ class Demonstrative:
                 demMat[i].append(list())
                 for k in range(2):
                     demMat[j].append(list())
-        
 
     def get(cls,proximity,case,gender,plural):
         return ("tam" if bool(proximity) else "") + demMat[case][gender][plural]
-
-def initVerbVariants():
-    result = list()
-    for i in range(3):
-        result.append(list())
-        for j in range(3):
-            result[i].append(list())
-            for k in range(2):
-                result[i][j].append(list())
-                for l in range(3):
-                    result[i][j][k].append(list())
-                    for m in range(2):
-                        result[i][j][k][l].append(list())
-    return result
-
-
-

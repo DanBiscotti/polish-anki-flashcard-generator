@@ -5,7 +5,7 @@ import wordclasses
 # NOUNS
 nouns = list()
 nouns.append(Noun("kitten",["kotek","kotka","kotkowi","kotka","kotkiem","kotku","kotku"],SINGULAR,MALE))
-nouns.append(Noun("book",["ksi"+on+zo+"ka","ksi"+on+zo+"ki","ksi"+on+zo+"ce","ksi"+on+zo+"k"+en,"ksi"+on+zo+"k"+on,"ksi"+on+zo+"ce","ksi"+on+zo+"ko"],SINGULAR,FEMALE,THIRD))
+nouns.append(Noun("book",["książka","książki","książce","książkę","książką","książce","książko"],SINGULAR,FEMALE,THIRD))
 nouns.append(Noun("egg",["jajko","jajka","jajku","jajko","jajkiem","jajku","jajko"],SINGULAR,NEUTER))
 nouns.append(Noun("penises",["penisy","penis"+oo+"w","penisom","penisy","penisami","penisach","penisy"],PLURAL,MALE))
 nouns.append(Noun("pussies",["cipki","cipek","cipkom","cipki","cipkami","cipkach","cipki"],PLURAL,FEMALE))
@@ -22,17 +22,13 @@ pronouns.append(Pronoun("you (plural)",["wy","","","","","",""],PLURAL,NEUTER,SE
 pronouns.append(Pronoun("they (male)",["oni","","","","","",""],PLURAL,MALE,THIRD))
 pronouns.append(Pronoun("they (female)",["ona","","","","","",""],PLURAL,FEMALE,THIRD))
 
-verbs = list()
-toBe = Verb("to be","by"+ch,[[[[,,"by"+wu],["byli"+sh+"my","byli"+sh+"cie","byli"]],[["by"+wu+"am","by"+wu+"a"+sh,"by"+wu+"a"],["by"+wu+"y"+sh+"my","by"+wu+"y"+sh+"cie","by"+wu+"y"]],[["","","by"+wu+"o"],["","","by"+wu+"y"]]],[[["","",""],["","",""]],[["","",""],["","",""]],[[[]]]]
-toLike = Verb("to annoy","denerwowa"+ch,[])
-
-verbs.append(toBe)
-verbs.append()
+with open(verbs.json) as f:
+    verbs = json.load(f)['verbs']
 
 sentences = list()
 
 def sentence1():
-    subject` = random.choice(nouns)
+    subject = random.choice(nouns)
     tense = random.choice(tuple(Tense))
     return "To "+toBe.getVerb(int(tense),int(subject.gender),int(subject.plural))+" "+subject.nominative
 
