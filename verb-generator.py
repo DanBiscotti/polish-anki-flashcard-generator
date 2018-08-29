@@ -1,5 +1,5 @@
 import json
-from wordclasses import initVerbVariants, Verb
+from wordclasses import Verb
 from grammarconstants import PAST,PRESENT,FUTURE,MALE,FEMALE,NEUTER,SINGULAR,PLURAL,FIRST,SECOND,THIRD,PERFECT,IMPERFECT
 
 def inputS(s):
@@ -10,6 +10,11 @@ def inputS(s):
 with  open('verbs.json') as f:
     obj = json.load(f)
 verbs=obj['verbs']
+transitives=obj['transitive']
+intransitives=obj['intransitive']
+ditransitives=obj['ditransitive']
+linkings=obj['linking']
+auxiliaries=obj['auxiliary']
 
 print("Adding new verb")
 print()
@@ -25,7 +30,7 @@ engFutureTensePerfect=input("english future tense perfect: ")
 engFutureTenseImperfect=input("english future tense imperfect: ")
 
 # Set english variations on the verb
-engVerbVariants = initVerbVariants()
+engVerbVariants = Verb.initVerbVariants()
 for i in range(3):
     for j in range(2):
         for k in range(3):
@@ -39,15 +44,33 @@ for i in range(3):
                 engVerbVariants[PRESENT][i][j][k][IMPERFECT]=engPresentTenseSingular
             engVerbVariants[PAST][i][j][k][PERFECT]=engPastTensePerfect
             engVerbVariants[FUTURE][i][j][k][PERFECT]=engFutureTensePerfect
-            engVerbVariants[FUTURE][i][j][k][IMPERFECT]=engFutureTensePerfect
+            engVerbVariants[FUTURE][i][j][k][IMPERFECT]=engFutureTenseImperfect
        
 # Get type of verb (which verb groups to add it to)
-transitive = input("transitive? (he "+engPresentTenseSingular+" the ball)"
-transitive = input("transitive? (he "+engPresentTenseSingular+" the ball)"
+if input("transitive? (he "+engPresentTenseSingular+" the ball)")=="y":
+    transitives.append(len(verbs))
+else:
+    pass
+if input("intransitive? (he "+engPresentTenseSingular+")")=="y":
+    intransitives.append(len(verbs)) 
+else:
+    pass
+if input("ditransitive (uses an indirect object)") == "y":
+    ditransitives.append(len(verbs))
+else:
+    pass
+if input("linking? (links the subject to a noun or an adjective)") == "y":
+    linkings.append(len(verbs))  
+else:
+    pass
+if input("auxiliary? (be, do, have) comes before another verb to provide extra information") == "y":
+    auxiliaries.append(len(verbs))
+else:
+    pass
 
 # Init nouns to make interface easier to handle (so user can see which variation of the verb to input)
-nouns = initVerbVariants()
-pnouns = initVerbVariants()
+nouns = Verb.initVerbVariants()
+pnouns = Verb.initVerbVariants()
 for i in range(3):
     for j in range(2):
 
@@ -65,7 +88,6 @@ for i in range(3):
         nouns[i][FEMALE][PLURAL][SECOND][j]="you (plural,female)"
         nouns[i][FEMALE][PLURAL][THIRD][j]="the pussies"
         nouns[i][NEUTER][SINGULAR][THIRD][j]="the egg"
-        nouns[i][NEUTER][PLURAL][THIRD][j]="the eggs"
         nouns[i][NEUTER][PLURAL][THIRD][j]="jajka"
 
         # Init Polish nouns
@@ -85,21 +107,23 @@ for i in range(3):
 
 polishInfinitive = input("polish infinitive: ")
 
+
 # Collect input from user on polish variation on the verb
-verbVariants = initVerbVariants()
+verbVariants = Verb.initVerbVariants()
 for i in range(3):
     for j in range(3):
         for k in range(2):
             for l in range(3):
                 for m in range(2):
-                    if i == PRESENT:
-                        if j == FEMALE:
-                            verbVariants[i][j][k][l][m]=verbVariants[i][MALE][k][l][m]
-                    elif j == NEUTER:
-                        if l == FIRST or l == SECOND:
-                            pass
-                        elif k == PLURAL:
-                            verbVariants[i][j][k][l][m]=verbVariants[i][FEMALE][k][l][m]
+                    # TODO future imperfect will be + infinitive
+                    if i == PRESENT and j == FEMALE:
+                        verbVariants[i][j][k][l][m]=verbVariants[i][MALE][k][l][m]
+                    elif (j == NEUTER and l == FIRST) or (j == NEUTER and l == SECOND):
+                        pass
+                    elif j == NEUTER and k == PLURAL:
+                        verbVariants[i][j][k][l][m]=verbVariants[i][FEMALE][k][l][m]
+                    elif i == PRESENT and m == PERFECT:
+                        pass
                     else: 
                         verbVariants[i][j][k][l][m] = input(nouns[i][j][k][l][m]+" "+engVerbVariants[i][j][k][l][m]+": "+pnouns[i][j][k][l][m]+" ")
 
