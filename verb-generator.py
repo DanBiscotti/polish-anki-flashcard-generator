@@ -1,4 +1,5 @@
 import json
+import _pickle as pickle
 from wordclasses import Verb
 from grammarconstants import PAST,PRESENT,FUTURE,MALE,FEMALE,NEUTER,SINGULAR,PLURAL,FIRST,SECOND,THIRD,PERFECT,IMPERFECT
 
@@ -7,14 +8,15 @@ def inputS(s):
     if st == 'x':
         sys.exit()
 
-with  open('verbs.json') as f:
-    obj = json.load(f)
+with  open('verbs.pkl','rb+') as f:
+    obj = pickle.load(f)
 verbs=obj['verbs']
-transitives=obj['transitive']
-intransitives=obj['intransitive']
-ditransitives=obj['ditransitive']
-linkings=obj['linking']
-auxiliaries=obj['auxiliary']
+transitives=obj['transitives']
+intransitives=obj['intransitives']
+ditransitives=obj['ditransitives']
+linkings=obj['linkings']
+auxiliaries=obj['auxiliaries']
+f.close()
 
 print("Adding new verb")
 print()
@@ -24,7 +26,8 @@ engInfinitive=input("english infinitive: ")
 engPastTensePerfect=input("english past tense perfect: ")
 engPastTenseImperfectSingular=input("english past tense imperfect singular: ")
 engPastTenseImperfectPlural=input("english past tense imperfect plural: ")
-engPresentTenseSingular=input("english present tense singular: ")
+engPresentTenseSingularFirst= input("english present tense singular first: ")
+engPresentTenseSingular=input("english present tense singular third: ")
 engPresentTensePlural=input("english present tense plural: ")
 engFutureTensePerfect=input("english future tense perfect: ")
 engFutureTenseImperfect=input("english future tense imperfect: ")
@@ -40,8 +43,11 @@ for i in range(3):
                 engVerbVariants[PRESENT][i][j][k][IMPERFECT]=engPresentTensePlural
             else:
                 engVerbVariants[PAST][i][j][k][IMPERFECT]=engPastTenseImperfectSingular
+                if k == FIRST:
+                    engVerbVariants[PRESENT][i][j][k][IMPERFECT]=engPresentTenseSingularFirst
+                else:
+                    engVerbVariants[PRESENT][i][j][k][IMPERFECT]=engPresentTenseSingular
                 engVerbVariants[PRESENT][i][j][k][PERFECT]=engPresentTenseSingular
-                engVerbVariants[PRESENT][i][j][k][IMPERFECT]=engPresentTenseSingular
             engVerbVariants[PAST][i][j][k][PERFECT]=engPastTensePerfect
             engVerbVariants[FUTURE][i][j][k][PERFECT]=engFutureTensePerfect
             engVerbVariants[FUTURE][i][j][k][IMPERFECT]=engFutureTenseImperfect
@@ -124,10 +130,13 @@ for i in range(3):
                         verbVariants[i][j][k][l][m]=verbVariants[i][FEMALE][k][l][m]
                     elif i == PRESENT and m == PERFECT:
                         pass
+                    elif i == FUTURE and m == IMPERFECT:
+                        verbVariants[i][j][k][l][m] verbs[0].variants[i][j][k][l][m]+" "+polishInfinitive
                     else: 
                         verbVariants[i][j][k][l][m] = input(nouns[i][j][k][l][m]+" "+engVerbVariants[i][j][k][l][m]+": "+pnouns[i][j][k][l][m]+" ")
 
 verbs.append(Verb(engInfinitive,polishInfinitive,verbVariants))
 
-with  open('verbs.json','w') as f:
-    json.dump(obj)
+with  open('verbs.json','wb+') as f:
+    pickle.dump(obj,f)
+    f.close()

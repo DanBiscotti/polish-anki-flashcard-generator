@@ -1,7 +1,7 @@
-from grammarconstants import PAST,PRESENT,FUTURE,MALE,FEMALE,NEUTER,SINGULAR,PLURAL,FIRST,SECOND,THIRD,PERFECT,IMPERFECT,NEAR,FAR
+from grammarconstants import *
+import random
 
-
-# wordclasses - Holds classes for different types of words, and also methods related to those word classes
+# wordclasses - Holds classes for different types of words
 
 
 # Noun class
@@ -15,24 +15,20 @@ class Noun:
         self.gender=gender
         self.person=THIRD
 
-    def getNoun(case):
-        return cases[case]
-
-    def copula(self):
-        if(bool(self.singular)):
-            return "jest"
-        else:
-            return "s"+on
+    def get(self,case):
+        return self.cases[case]
 
 
 # Pronoun class
 class Pronoun(Noun):
 
+    pronouns = list()
+
     # Constructor
     def __init__(self,english,cases,plural,gender,person):
         Noun.__init__(self,english,cases,plural,gender)
         self.person=person
-
+        
     def get(case):
         if(self.gender==NEUTER):
             self.gender=random.choice(tuple(MALE,FEMALE,NEUTER))
@@ -42,6 +38,44 @@ class Pronoun(Noun):
         self.gender=gender
         return cases[case]
 
+    @classmethod
+    def getPronoun(cls,gender,singular,person,personal=False):
+        if singular == SINGULAR:
+            if person == FIRST:
+                return Pronoun.pronouns[0]
+            elif person == SECOND:
+                return Pronoun.pronouns[1]
+            else:
+                if personal:
+                    if gender == MALE:
+                        return Pronoun.pronouns[2]
+                    elif gender == FEMALE:
+                        return Pronoun.pronouns[3]
+                else:
+                    return Pronoun.pronouns[4]
+        else:
+            if person == FIRST:
+                return Pronoun.pronouns[5]
+            elif person == SECOND:
+                return Pronoun.pronouns[6]
+            else:
+                if gender == MALE:
+                    return Pronoun.pronouns[7]
+                elif gender == FEMALE:
+                    return Pronoun.pronouns[8]
+                else:
+                    return Pronoun.pronouns[9]
+
+Pronoun.pronouns.append(Pronoun("I",["ja","","","","","",""],SINGULAR,NEUTER,FIRST))
+Pronoun.pronouns.append(Pronoun("you",["ty","","","","","",""],SINGULAR,NEUTER,SECOND))
+Pronoun.pronouns.append(Pronoun("he",["on","","","","","",""],SINGULAR,MALE,THIRD))
+Pronoun.pronouns.append(Pronoun("she",["ona","","","","","",""],SINGULAR,FEMALE,THIRD))
+Pronoun.pronouns.append(Pronoun("it",["to","","","","","",""],SINGULAR,NEUTER,THIRD))
+Pronoun.pronouns.append(Pronoun("we",["my","","","","","",""],PLURAL,NEUTER,FIRST))
+Pronoun.pronouns.append(Pronoun("you (plural)",["wy","","","","","",""],PLURAL,NEUTER,SECOND))
+Pronoun.pronouns.append(Pronoun("they (male)",["oni","","","","","",""],PLURAL,MALE,THIRD))
+Pronoun.pronouns.append(Pronoun("they (female)",["ona","","","","","",""],PLURAL,FEMALE,THIRD))
+Pronoun.pronouns.append(Pronoun("they (neuter)",["ono","","","","","",""],PLURAL,NEUTER,THIRD))
 
 # Verb Class
 class Verb:
@@ -52,8 +86,8 @@ class Verb:
         self.infinitive=infinitive
         self.variants=variants
 
-    def get(self,tense,gender,plural,person):
-        return self.variants[tense][gender][plural][person]
+    def get(self,tense,gender,plural,person,perfect):
+        return self.variants[tense][gender][plural][person][perfect]
 
     # Method that returns an empty 5d array for holding verb conjugations
     @staticmethod
