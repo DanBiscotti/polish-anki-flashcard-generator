@@ -14,6 +14,12 @@ with open("verbs.pkl",'rb+') as f:
     linkings = obj['linkings']
     auxiliaries = obj['auxiliaries']
 
+with open("verbs.json",'rb+') as f:
+    obj = pkl.load(f)
+    f.close()
+    verbs.append(obj['verbs'][1])
+    print(verbs[1].variants)
+
 # NOUNS
 nouns = list()
 nouns.append(Noun("kitten",["kotek","kotka","kotkowi","kotka","kotkiem","kotku","kotku"],SINGULAR,MALE))
@@ -25,26 +31,35 @@ nouns.append(Noun("pussies",["cipki","cipek","cipkom","cipki","cipkami","cipkach
 sentences = list()
 
 def sentence1():
+
     subject = random.choice(nouns)
-    tense = random.choice(tuple([PAST,PRESENT,FUTURE]))
-    perfect = random.choice(tuple([PERFECT,IMPERFECT]))
-    pronoun = Pronoun.getPronoun(subject.gender,subject.singular,subject.person)
-    return pronoun.get(NOM)+" "+verbs[0].get(tense,subject.gender,subject.singular,subject.person,perfect)+" "+subject.get(NOM)
+    v = Rand.randVerb(gender=subject.gender,mult=subject.mult,person=THIRD)
+    pronoun = Pronoun.getPronoun(subject.gender,subject.mult,THIRD)
+    return pronoun.get(NOM)+" "+verbs[0].get(v['tense'],subject.gender,subject.mult,subject.person,v['verbstate'])+" "+subject.get(NOM)
 
 def sentence2():
+
+    subject = random.choice(nouns)
+    v = Rand.randVerb(gender=subject.gender,mult=subject.mult,True)
+    pronoun = Pronoun.getPronoun(subject.gender,subject.mult,v['person'],True)
+    verb = random.choice(verbs)
+    return pronoun.get(NOM)+" "+verb.get(v['tense'],subject.gender,subject.mult,pronoun.person,v['verbstate'])+" "+subject.get(ACC)
+
+
+def sentence3():
     verb = random.choice(verbs)
     return "Lubię "+verb.infinitive
 
-def sentence3():
+def sentence4():
     subject = random.choice(nouns)
     verb = random.choice(verbs)
     return subject.nominative+" lubi "+verb.infinitive
 
-sentences.append(Sentence(sentence1))
+#sentences.append(Sentence(sentence1))
 sentences.append(Sentence(sentence2))
 
 while True:
     print(random.choice(sentences).get())
     s = input()
     if(s=="x"):
-        sys.exit()
+        exit()

@@ -8,10 +8,10 @@ import random
 class Noun:
     
     # Constructor
-    def __init__(self,english,cases,singular,gender):
+    def __init__(self,english,cases,mult,gender):
         self.english=english
         self.cases=cases
-        self.singular=singular
+        self.mult=mult
         self.gender=gender
         self.person=THIRD
 
@@ -25,18 +25,30 @@ class Pronoun(Noun):
     pronouns = list()
 
     # Constructor
-    def __init__(self,english,cases,plural,gender,person):
-        Noun.__init__(self,english,cases,plural,gender)
-        self.person=person
-        
-    def get(case):
-        if(self.gender==NEUTER):
-            self.gender=random.choice(tuple(MALE,FEMALE,NEUTER))
-        return cases[case]
-
-    def get(case,gender):
+    def __init__(self,english,cases,mult,gender,person):
+        Noun.__init__(self,english,cases,mult,gender)
+        self.english=english
+        self.cases=cases
+        self.mult=mult
         self.gender=gender
-        return cases[case]
+        self.person=person
+
+        
+    def get(self,case):
+        if(self.gender==NEUTER):
+            self.gender=random.choice(tuple([MALE,FEMALE,NEUTER]))
+        return self.cases[case]
+
+    def getGendered(self,gender):
+        self.gender=gender
+        return self
+    
+    @classmethod
+    def getNonPersonalPronoun(cls, singular):
+        if singular == SINGULAR:
+            return Pronoun.pronouns[5]
+        else:
+            return Pronoun.pronouns[8]
 
     @classmethod
     def getPronoun(cls,gender,singular,person,personal=False):
@@ -74,7 +86,7 @@ Pronoun.pronouns.append(Pronoun("it",["to","","","","","",""],SINGULAR,NEUTER,TH
 Pronoun.pronouns.append(Pronoun("we",["my","","","","","",""],PLURAL,NEUTER,FIRST))
 Pronoun.pronouns.append(Pronoun("you (plural)",["wy","","","","","",""],PLURAL,NEUTER,SECOND))
 Pronoun.pronouns.append(Pronoun("they (male)",["oni","","","","","",""],PLURAL,MALE,THIRD))
-Pronoun.pronouns.append(Pronoun("they (female)",["ona","","","","","",""],PLURAL,FEMALE,THIRD))
+Pronoun.pronouns.append(Pronoun("they (female)",["one","","","","","",""],PLURAL,FEMALE,THIRD))
 Pronoun.pronouns.append(Pronoun("they (neuter)",["ono","","","","","",""],PLURAL,NEUTER,THIRD))
 
 # Verb Class

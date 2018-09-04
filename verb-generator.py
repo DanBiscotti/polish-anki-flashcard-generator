@@ -13,7 +13,7 @@ with  open('verbs.pkl','rb+') as f:
 verbs=obj['verbs']
 transitives=obj['transitives']
 intransitives=obj['intransitives']
-ditransitives=obj['ditransitives']
+ditransitives=obj['ditransitive']
 linkings=obj['linkings']
 auxiliaries=obj['auxiliaries']
 f.close()
@@ -121,7 +121,6 @@ for i in range(3):
         for k in range(2):
             for l in range(3):
                 for m in range(2):
-                    # TODO future imperfect will be + infinitive
                     if i == PRESENT and j == FEMALE:
                         verbVariants[i][j][k][l][m]=verbVariants[i][MALE][k][l][m]
                     elif (j == NEUTER and l == FIRST) or (j == NEUTER and l == SECOND):
@@ -129,14 +128,14 @@ for i in range(3):
                     elif j == NEUTER and k == PLURAL:
                         verbVariants[i][j][k][l][m]=verbVariants[i][FEMALE][k][l][m]
                     elif i == PRESENT and m == PERFECT:
-                        pass
+                        verbVariants[i][j][k][l][m]=verbVariants[i][j][k][l][IMPERFECT]
                     elif i == FUTURE and m == IMPERFECT:
-                        verbVariants[i][j][k][l][m] verbs[0].variants[i][j][k][l][m]+" "+polishInfinitive
+                        verbVariants[i][j][k][l][m] = verbs[0].variants[i][j][k][l][m]+" "+polishInfinitive
                     else: 
                         verbVariants[i][j][k][l][m] = input(nouns[i][j][k][l][m]+" "+engVerbVariants[i][j][k][l][m]+": "+pnouns[i][j][k][l][m]+" ")
 
 verbs.append(Verb(engInfinitive,polishInfinitive,verbVariants))
 
-with  open('verbs.json','wb+') as f:
+with  open('verbs.pkl','wb+') as f:
     pickle.dump(obj,f)
     f.close()
