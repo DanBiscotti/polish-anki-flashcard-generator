@@ -1,4 +1,4 @@
-#!/home/dan/Life/Programming/polish-anki-flashcard-generator/bin/python
+#!/Users/justaskotarek/polish-anki-flashcard-generator/bin/python3
 
 # -*- coding: utf-8 -*-
 import re

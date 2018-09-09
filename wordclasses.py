@@ -6,7 +6,7 @@ import random
 
 # Noun class
 class Noun:
-    
+
     # Constructor
     def __init__(self,english,cases,mult,gender):
         self.english=english
@@ -33,7 +33,7 @@ class Pronoun(Noun):
         self.gender=gender
         self.person=person
 
-        
+
     def get(self,case):
         if(self.gender==NEUTER):
             self.gender=random.choice(tuple([MALE,FEMALE,NEUTER]))
@@ -42,13 +42,13 @@ class Pronoun(Noun):
     def getGendered(self,gender):
         self.gender=gender
         return self
-    
+
     @classmethod
     def getNonPersonalPronoun(cls, singular):
         if singular == SINGULAR:
             return Pronoun.pronouns[5]
         else:
-            return Pronoun.pronouns[8]
+            return Pronoun.pronouns[5]
 
     @classmethod
     def getPronoun(cls,gender,singular,person,personal=False):
@@ -71,12 +71,15 @@ class Pronoun(Noun):
             elif person == SECOND:
                 return Pronoun.pronouns[6]
             else:
-                if gender == MALE:
-                    return Pronoun.pronouns[7]
-                elif gender == FEMALE:
-                    return Pronoun.pronouns[8]
+                if personal:
+                    if gender == MALE:
+                        return Pronoun.pronouns[7]
+                    elif gender == FEMALE:
+                        return Pronoun.pronouns[8]
+                    else:
+                        return Pronoun.pronouns[9]
                 else:
-                    return Pronoun.pronouns[9]
+                    return Pronoun.pronouns[4]
 
 Pronoun.pronouns.append(Pronoun("I",["ja","","","","","",""],SINGULAR,NEUTER,FIRST))
 Pronoun.pronouns.append(Pronoun("you",["ty","","","","","",""],SINGULAR,NEUTER,SECOND))
